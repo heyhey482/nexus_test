@@ -9,6 +9,31 @@
     <title>NEXUS 사진촬영</title>
     <script type="text/javascript"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <style>
+      .modifyContent{
+        display: none;
+      }
+
+      #controllerWrap{
+        text-align: center;
+      }
+
+      #controllerWrap button {
+        margin-top: 10px;
+        width: 300px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        background:rgb(22, 179, 129);
+        color: white;
+        /* border-radius: 4px; */
+        cursor: pointer;
+        font-weight: bold;
+      }
+
+      #controllerWrap button:hover{
+        background: rgb(43, 215, 161);
+      }
+    </style>
 </head>
 <body>
   <div id="wrap">
@@ -17,13 +42,65 @@
       <h3><span>홍길동</span>님<br> 
         개별활동을 등록해 주세요</h3>
       <p class="con">경사진 밭 둘레에 빗물이 돌아가는 이랑 만들기</p>
-      <button type="button" class="photo_add">
-        <p class="cont">사진추가</p>
-      </button>
+      <form method="post" action="./photo1.html" enctype="multipart/form-data">
+        <input type="hidden" name="wpId" value="1">
+        <!-- <label class="fileInput">Your custom placeholder ...</label> -->
+        <input type="hidden" id="fileInput" value="1">
+        <button type="button" class="photo_add" id="addBtn">
+          <p class="cont">사진추가</p>
+        </button>
+        <div id="controllerWrap" class="modifyContent">
+          <button type="" id="uploadBtn">이미지 업로드</button>
+        </div>
+        <div id="photoWrap" class="modifyContent" style="display: relative; height: 200px; display: none;">
+
+        </div>
+
+      </form>
     </div>  
     <!-- //사진촬영 -->  
+
     
   </div>
+<script>
+
+  var addBtn = document.getElementById("addBtn");
+  var modifyBtn = document.getElementById("modifyBtn");
+  var uploadBtn = document.getElementById("uploadBtn");
+
+  var photoWrap = document.getElementById("photoWrap");
+  var controllerWrap = document.getElementById("controllerWrap");
+
+  addBtn.addEventListener("click", addPhoto);
+  modifyBtn.addEventListener("click", addPhoto);
+  uploadBtn.addEventListener("click", fileUpload);
+
+  function addPhoto() {
+    var input = document.getElementById("fileInput");
+    input.type = "file";
+    input.name = "file";
+    input.accept = "image/*";
+    input.onchange = function() {
+      var file = this.files[0];
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var img = document.createElement("img");
+        img.src = e.target.result;
+        img.style.width = "300px";
+
+        // 사진 영역
+        photoWrap.innerHTML = img.outerHTML;
+
+        addBtn.style.display = "none";
+        photoWrap.style.display = "block";
+        controllerWrap.style.display = "block";
+      };
+      reader.readAsDataURL(file);
+    };
+    input.click();
+  }
+
+</script>
 </body>
 </html>    
      
